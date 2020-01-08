@@ -1,56 +1,65 @@
 import React, {Component} from 'react'
+import "./public/stylesheets/board.css";
+import axios from  "axios";
 
 class Board extends Component {
     constructor(props) {
         super(props);
-        this.state = {apiResponse: ""};
+        this.state = {
+            isFetching: false,
+            apiResponse: [],
+        };
     }
 
-    callAPI() {
-        fetch("http://localhost:3000/dashboard")
-            .then((response) => {
-                return response.json();
-            }).then(res => this.setState({apiResponse: res.data}));
-        console.log(this.state.apiResponse);
+    async callAPI() {
+        this.setState({...this.state, isFetching: true});
+        const res = await axios.get("http://localhost:3000/dashboard")
+        console.log(res.data);
+        this.setState({apiResponse: res.data, isFetching: false})
     }
 
     componentDidMount() {
-        this.callAPI();
+        this.timerID = setInterval(
+            () =>  this.callAPI(),
+            60 * 1000
+        );
     }
 
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
 
     render() {
         const columnOpts = [
-            { key: 'Carrier', name: 'Carrier' },
-            { key: 'Time', name: 'Time' },
-            { key: 'Destination', name: 'Destination' },
-            { key: 'Trains', name: 'Trains' },
-            { key: 'Track', name: 'Track' },
-            { key: 'Status', name: 'Status' },
+            { key: 'carrier', name: 'Carrier' },
+            { key: 'time', name: 'Time' },
+            { key: 'destination', name: 'Destination' },
+            { key: 'trains', name: 'Trains' },
+            { key: 'track', name: 'Track' },
+            { key: 'status', name: 'Status' },
         ];
 
         return (
             <div className="table">
-                <ul className="table-header">
+                <table>
                     {
                         columnOpts.map((opt, colIndex) => (
-                            <li key={`col-${colIndex}`}>{opt.name}</li>
+                            <th key={`col-${colIndex}`}>{opt.name}</th>
                         ))
                     }
-                </ul>
-                <ul className="table-body">
+                    <br />
                     {
                         this.state.apiResponse.map((entry, rowIndex) => (
-                            <li key={`row-${rowIndex}`}>
+                            <tr key={`row-${rowIndex}`}>
                                 {
                                     columnOpts.map((opt, colIndex) => (
-                                        <span key={`col-${colIndex}`}>{entry[opt.key]}</span>
+                                        <td key={`col-${colIndex}`}>{entry[opt.key]}</td>
                                     ))
                                 }
-                            </li>
+                            </tr>
                         ))
                     }
-                </ul>
+                </table>
             </div>
         );
     }

@@ -26,7 +26,7 @@ export default class Time extends Component {
     render() {
         return (
             <div className="CurrentTime">
-                <h2 id="datetime"> Current Date/Time: {this.state.date.toDateString()+ this.state.date.toLocaleTimeString()} </h2>
+                <h2 id="datetime"> Current Date/Time: {this.state.date.toDateString() + " "+ this.state.date.toLocaleTimeString()} </h2>
             </div>
         );
     }

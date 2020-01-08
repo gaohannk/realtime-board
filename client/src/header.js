@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import "./header.css";
+import "./public/stylesheets/header.css";
 import Time from "./time";
 
 export default class Header extends Component {

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './public/stylesheets/index.css';
 import Header from './header';
 import registerServiceWorker from './registerServiceWorker';
 import Board from "./board";
